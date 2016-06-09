@@ -301,6 +301,8 @@ class TestSAValidation(ManagerTestBase):
         """
         data = dict(data=dict(type='person'))
         response = self.app.post('/api/person', data=dumps(data))
+        print(response)
+        print(response.data)
         check_sole_error(response, 400, ['validation', 'email'])
         # Check that the person was not created.
         assert self.session.query(self.Person).count() == 0
