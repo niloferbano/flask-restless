@@ -301,12 +301,7 @@ class TestSAValidation(ManagerTestBase):
         """
         data = dict(data=dict(type='person'))
         response = self.app.post('/api/person', data=dumps(data))
-        assert response.status_code == 400
-        document = loads(response.data)
-        errors = document['errors']
-        error = errors[0]
-        assert 'validation' in error['title'].lower()
-        assert 'email' in error['detail'].lower()
+        check_sole_error(response, 400, ['validation', 'email'])
         # Check that the person was not created.
         assert self.session.query(self.Person).count() == 0
 
@@ -321,12 +316,7 @@ class TestSAValidation(ManagerTestBase):
                      }
                 }
         response = self.app.post('/api/person', data=dumps(data))
-        assert response.status_code == 400
-        document = loads(response.data)
-        errors = document['errors']
-        error = errors[0]
-        assert 'validation' in error['title'].lower()
-        assert 'email' in error['detail'].lower()
+        check_sole_error(response, 400, ['validation', 'email'])
         # Check that the person was not created.
         assert self.session.query(self.Person).count() == 0
 
@@ -363,11 +353,6 @@ class TestSAValidation(ManagerTestBase):
                      }
                 }
         response = self.app.patch('/api/person/1', data=dumps(data))
-        assert response.status_code == 400
-        document = loads(response.data)
-        errors = document['errors']
-        error = errors[0]
-        assert 'validation' in error['title'].lower()
-        assert 'email' in error['detail'].lower()
+        check_sole_error(response, 400, ['validation', 'email'])
         # Check that the person was not updated.
         assert person.email == u'example@example.com'
