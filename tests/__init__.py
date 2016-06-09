@@ -23,3 +23,5 @@ Run the full test suite from the command-line using ``nosetests`` (or
 ``python setup.py test``).
 
 """
+import warnings
+warnings.simplefilter('error')
