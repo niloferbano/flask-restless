@@ -14,6 +14,7 @@ from datetime import date
 from datetime import datetime
 from datetime import time
 from unittest2 import skip
+import sys
 
 # This import is unused but is required for testing on PyPy. CPython can
 # use psycopg2, but PyPy can only use psycopg2cffi.
@@ -39,6 +40,11 @@ from .helpers import check_sole_error
 from .helpers import dumps
 from .helpers import loads
 from .helpers import ManagerTestBase
+
+if sys.version_info < (3, 0):
+    to_string = unicode
+else:
+    to_string = str
 
 
 #: The PostgreSQL class used to create a temporary database for testing.
@@ -949,7 +955,7 @@ class TestSimpleFiltering(ManagerTestBase):
         self.session.add(article)
         for i in range(1, 3):
             comment = self.Comment(id=i)
-            tag = self.Tag(name=str(i))
+            tag = self.Tag(name=to_string(i))
             comment.article = article
             comment.tag = tag
             self.session.add_all([comment, tag])
