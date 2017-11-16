@@ -191,7 +191,7 @@ def catch_integrity_errors(session):
             except (DataError, IntegrityError, ProgrammingError) as exception:
                 session.rollback()
                 current_app.logger.exception(str(exception))
-                return dict(message=type(exception).__name__), 400
+                return dict(message=str(exception.orig),success=False), 400
         return wrapped
     return decorator
 
