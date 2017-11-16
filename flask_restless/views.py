@@ -914,9 +914,7 @@ class API(ModelView):
 
         """
         self.session.rollback()
-        errors = extract_error_messages(exception) or \
-            'Could not determine specific validation errors'
-        return dict(validation_errors=errors), 400
+        return return {'success': False, 'message': str(exception)}, 400
 
     def _compute_results_per_page(self):
         """Helper function which returns the number of results per page based
@@ -1011,7 +1009,7 @@ class API(ModelView):
         # on the current model.
         for field in data:
             if not has_field(self.model, field):
-                msg = "Model does not have field '{0}'".format(field)
+                msg = "Field '{0}' not available.".format(field)
                 raise ValidationError(msg)
 
         # Getting the list of relations that will be added later
@@ -1539,8 +1537,8 @@ class API(ModelView):
         # on the current model.
         for field in data:
             if not has_field(self.model, field):
-                msg = "Model does not have field '{0}'".format(field)
-                return dict(message=msg), 400
+                msg = "Field '{0}' not available.".format(field)
+                return dict(message=msg, success=False), 400
 
         if patchmany:
             try:
