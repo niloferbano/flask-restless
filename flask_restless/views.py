@@ -914,7 +914,7 @@ class API(ModelView):
 
         """
         self.session.rollback()
-        return return {'success': False, 'message': str(exception)}, 400
+        return {'success': False, 'message': str(exception)}, 400
 
     def _compute_results_per_page(self):
         """Helper function which returns the number of results per page based
